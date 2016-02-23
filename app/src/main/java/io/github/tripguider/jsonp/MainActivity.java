@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
-                hidepDialog();
+                hidepDialog();//Test
             }
         });
 
