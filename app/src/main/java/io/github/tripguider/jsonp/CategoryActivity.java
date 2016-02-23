@@ -19,7 +19,7 @@ public class CategoryActivity extends AppCompatActivity {
         tvView = (TextView) findViewById(R.id.txtTitle);
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
-        tvView.setText("It's " + title);
+        //tvView.setText("It's " + title);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(title);
