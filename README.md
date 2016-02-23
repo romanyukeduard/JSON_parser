@@ -18,7 +18,7 @@ If you want to use AppController you must update AndroidManifest
 ```
 
 #Back Arrow Button
-Declare Parent Activity
+Declare Parent Activity in AndroidManifest
 ``` xml
 <activity
     android:name=".CategoryActivity"
@@ -27,4 +27,11 @@ Declare Parent Activity
       android:name="android.support.PARENT_ACTIVITY"
       android:value=".MainActivity" />
 </activity>
+```
+Code in Activity
+``` java
+mToolbar = (Toolbar) findViewById(R.id.toolbar);
+mToolbar.setTitle(title);
+setSupportActionBar(mToolbar);
+getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 ```
