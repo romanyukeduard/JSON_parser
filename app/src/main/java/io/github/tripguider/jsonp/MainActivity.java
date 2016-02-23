@@ -3,6 +3,7 @@ package io.github.tripguider.jsonp;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -33,13 +34,14 @@ import io.github.tripguider.jsonp.recycler.Adapter;
 import io.github.tripguider.jsonp.recycler.DividerItemDecoration;
 import io.github.tripguider.jsonp.recycler.ListItems;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private Toolbar mToolbar;
 
     private List<ListItems> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private Adapter mAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private String urlJsonObj = "http://romanyukeduard.github.io/my.json";
 
@@ -53,6 +55,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main);
 
         initToolbar();
+
+        /*swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
+        swipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        swipeRefreshLayout.setRefreshing(true);
+
+                                        prepareData();
+                                    }
+                                }
+        );*/
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        // делаем повеселее
+        //swipeRefreshLayout.setColorScheme(R.color.blue, R.color.green, R.color.yellow, R.color.red);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
@@ -85,6 +107,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         prepareData();
+    }
+
+    @Override
+    public void onRefresh() {
+        // говорим о том, что собираемся начать
+        //Toast.makeText(this, "refresh", Toast.LENGTH_SHORT).show();
+        // начинаем показывать прогресс
+        swipeRefreshLayout.setRefreshing(true);
+        // ждем 3 секунды и прячем прогресс
+        swipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                prepareData();
+                swipeRefreshLayout.setRefreshing(false);
+                //Toast.makeText(MainActivity.this, "finish", Toast.LENGTH_SHORT).show();
+            }
+        }, 3000);
     }
 
     private void initToolbar() {
