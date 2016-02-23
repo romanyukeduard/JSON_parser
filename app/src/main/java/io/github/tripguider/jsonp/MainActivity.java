@@ -4,13 +4,17 @@ import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,11 +24,14 @@ import io.github.tripguider.jsonp.app.AppController;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String urlJson = "http://tripguider.github.io/categories.json";
+    private String urlJsonArray = "http://tripguider.github.io/categories.json";
+    private String urlJsonObj = "http://romanyukeduard.github.io/my.json";
 
     private static String TAG = MainActivity.class.getSimpleName();
 
     private ProgressDialog pDialog;
+
+    private Button obj, arr;
 
     private TextView txtResponse;
     private String jsonResponse;
@@ -36,11 +43,85 @@ public class MainActivity extends AppCompatActivity {
 
         txtResponse = (TextView) findViewById(R.id.txt);
 
+        obj = (Button) findViewById(R.id.obj);
+        arr = (Button) findViewById(R.id.arr);
+
+        obj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                makeJsonObjReq(urlJsonObj);
+
+            }
+        });
+
+        arr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                makeJsonRequest(urlJsonArray);
+
+            }
+        });
+
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
+    }
 
-        makeJsonRequest(urlJson);
+    private void makeJsonObjReq(String url) {
+
+        showpDialog();
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                url, (String)null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+
+                try {
+                    jsonResponse="";
+                    JSONArray data = response.getJSONArray("data");
+
+                    for (int i = 0; i < data.length(); i++) {
+
+                        JSONObject name = (JSONObject) data
+                                .get(i);
+
+                        String title = name.getString("name");
+
+
+                        jsonResponse += "Name: " + title + "\n\n";
+
+                    }
+
+                    txtResponse.setText("");
+                    txtResponse.setText(jsonResponse);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+                hidepDialog();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                // hide the progress dialog
+                hidepDialog();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
+
     }
 
     private void makeJsonRequest(String url) {
@@ -54,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, response.toString());
 
                         try {
-                            // Parsing json array response
-                            // loop through each json object
                             jsonResponse = "";
                             for (int i = 0; i < response.length(); i++) {
 
@@ -63,19 +142,12 @@ public class MainActivity extends AppCompatActivity {
                                         .get(i);
 
                                 String name = person.getString("name");
-                                /*String email = person.getString("email");
-                                JSONObject phone = person
-                                        .getJSONObject("phone");
-                                String home = phone.getString("home");
-                                String mobile = phone.getString("mobile");*/
 
                                 jsonResponse += "Name: " + name + "\n\n";
-                                /*jsonResponse += "Email: " + email + "\n\n";
-                                jsonResponse += "Home: " + home + "\n\n";
-                                jsonResponse += "Mobile: " + mobile + "\n\n\n";*/
 
                             }
 
+                            txtResponse.setText("");
                             txtResponse.setText(jsonResponse);
 
                         } catch (JSONException e) {

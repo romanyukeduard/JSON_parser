@@ -9,9 +9,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="io.github.tripguider.jsonp.MainActivity">
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Object"
+        android:id="@+id/obj"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Array"
+        android:id="@+id/arr"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:id="@+id/txt"/>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/txt"
+        android:layout_below="@+id/obj"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
