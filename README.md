@@ -3,6 +3,8 @@ In this parser I used Volley libarary(https://github.com/mcxiaoke/android-volley
 
 dependency for Gradle:
 ``` groovy
+compile 'com.android.support:design:23.1.1'
+compile 'com.android.support:recyclerview-v7:23.1.1'
 compile 'com.android.support:appcompat-v7:23.1.1'
 compile 'com.mcxiaoke.volley:library:1.0.19'
 ```
